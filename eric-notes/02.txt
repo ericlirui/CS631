@@ -1,5 +1,56 @@
 course note 2
 
+1.file descriptor is related to each program itself, so in each program the FD starts by 0.
+
+2.when a FD is closed , the program next time will choose to use the lowest availble FD number to use.
+
+3.the FD of Stderr can also be closed and reused; also ,the FD of stderr can also be redirected to other terminal.
+
+4.call getrlimit() to get the system limitation. 
+
+Usually, in the mutiuser system, the FD for each user is divided and it seems less than the FD owned by the process.
+
+otherwise, in the mac,the result may be diffirent.  like user: 10240, process:256.
+
+we can use ulimit -n xxx to modify the limitation of FD.
+
+5.creat(2) is obsolete by open now.
+
+if we try to read a file,we should create , then close the file ,then open it again, and read, which is a lot of steps,also may cause atomic problems..
+
+use open instead of creat.
+
+6. Use least priveledge principle when open or write file.
+
+7. TOCTOU : check illegal situation:
+   --file not exist
+   --rlimit
+   --permission error
+  --path name too long
+
+man open for details.
+
+8.like free and malloc, close file after open file always with same scope, in order to avoid leak resource.
+
+Use (void)close when you are ready to choose to ignore the return code.
+
+9. One FD with read or wirte oprations, it shares the same offset in the FD.
+
+10. lseek cannot go negative , but it can go past the end of the file.
+
+11. hexdump is a useful to show content in hex format.
+
+12.sparse file is valid in NetBSD, it does not consume less blocks even  the file size is the same. it depends on the file system.
+
+13.stat -f "%k" newfile  
+	find the best buffer size.
+
+14. fctl can change the write operation to async mode.
+
+15. truncate mode?
+
+ 
+
 
 
 
