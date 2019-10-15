@@ -1,0 +1,11 @@
+
+problems that I encountered:
+1. when execute command "./bbcp . file", the program does not send an error;
+And I find than I forget to check the source file is a file, not a directory.
+
+2. When copy from a small file to a large file, only the first line has been copied to the large file.
+So I check out it is because I do not clean the target file to get it ready to be written.
+
+3. When I first time copy the existing file, the program does not encounter an error. So, it does the duplicate copy. To solve this problem, I fetch the inode info of a file and then compare with the file stat info to make sure the file is exactly the same.
+
+4.For the mmap with flag MAP_SHARED, the file should have both read and write permissions. For the flag MAP_PRIVATE, the file should have O_RDONLY permission.
