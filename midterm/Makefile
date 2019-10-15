@@ -1,8 +1,8 @@
 cc=gcc
-CFLAGS=-ansi -g -Wall -Werror -Wextra -Wformat=2 -Wpedantic -Wshadow
+CFLAGS=-ansi -g -Wall -Werror -Wextra -Wformat=2  -Wshadow -Wlogical-op -fgnu89-inline
 
-ls: ls.o
-	$(cc) -o ls  ls.o
+ls: ls.o cmp.o dlist.o print.o
+	$(cc) -o ls -lm ls.o cmp.o dlist.o print.o
 
 clean:
-	rm ls.o
+	rm ls.o cmp.o dlist.o print.o
