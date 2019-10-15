@@ -1,0 +1,2 @@
+1.I did implement all the parameters. but I dont have time to do the format print with same indent. I need to traverse the max length of all the output parameters. I will complete it in the future.
+2.I use the double list of linux kernel implementation to do my double linked list. So. the dlist.h will include some inline functions which is by the linux implementation , not by me.
