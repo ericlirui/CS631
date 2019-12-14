@@ -1,6 +1,11 @@
-course note 1
+After :
 
+1.For compile , we can make all warnings into errors by using -Werror compile flag.
 
+2. GNU did not have kernel ,just a set of tools. 
 
+3.Man page have 7 or more sections, we can tell a function is a library function or system calls by looking up to man page.
+
+4. NetBSD, is the first free open sourced version of BSD.
 
 

@@ -1,3 +1,6 @@
+Before class:
+1.what is the truncate mode of a file?
+
 course note 2
 
 1.file descriptor is related to each program itself, so in each program the FD starts by 0.
@@ -47,7 +50,7 @@ Use (void)close when you are ready to choose to ignore the return code.
 
 14. fctl can change the write operation to async mode.
 
-15. truncate mode?
+
 
  
 
