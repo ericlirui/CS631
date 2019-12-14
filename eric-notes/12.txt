@@ -1,0 +1,26 @@
+Before class:
+What is the record lock? 
+
+After class:
+1. 
+     Share-lock | exclusive lock
+R/W	R      |   W
+
+If one get the exclusive lock, share lock can not be got. 
+Both can get the share lock together.
+
+2.non-block checks the state all the time.
+
+3. Locks are not inherited across fork.
+
+4. Don't use RC4 as a cipher mode.
+
+5. Rot13 : encrypt or decrypt tool.
+
+6. See evp_encryptInt function.
+
+7. For the group work to parse the uri in Http request:
+ If URI is "/~[a-z0-9]+/":
+   - Get the username from the regex pattern
+   - Use getpwnam(username) to get their pw and cd to "pw->pw_dir"/sws if it
+     exists.

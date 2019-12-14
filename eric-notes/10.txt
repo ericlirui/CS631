@@ -1,0 +1,28 @@
+Before class:
+1. What is the maximum header size a request can fill in?
+2. Is the date-since-if-modified header necessary?
+
+
+After class:
+1. Server should judge if the connection is connected and timeout.
+
+2. If non -success return code returned, there also should return something based on the content type.
+
+3. curl -o -v https:xxx/cgi-bin/foo.cgi?var=foo
+
+4. The midterm project http server should check GET/HEAD method, date-since-if-modified( not necessary ), and the HTTP protocol.
+
+5. A pseudo code for the http request parse procedure:
+
+1) Validate the input
+2) Parse input into 3 fields.
+   - Validate the HTTP verb and version.
+3) Parse the URI.
+   - If it's CGI:
+     - Validate cgi prefix
+     - Split URI by query string and assign environment variable if needed.
+     - Check that executable exists and is executable
+     - Process script similarly to HW 2 with pipe:
+       - Parent Process will handle the request, read stdin, and wait for child.
+       - Child Process will dup2 stdout, signal as needed, and exec the script.
+

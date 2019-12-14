@@ -1,0 +1,11 @@
+Before class:
+How is the system get started?
+
+After class:
+1. During the system startup , init will bootstraps the system with required processes to run using fork and exec 
+
+2.kill allows a user to send any signal to any process.
+
+3.Signal handlers need to be re-registered after use.
+
+4.Re-entrant handlers exists, those handlers cannot use library functions.

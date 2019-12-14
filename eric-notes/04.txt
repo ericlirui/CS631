@@ -1,0 +1,21 @@
+Before class:
+
+How to traverse the directories efficiently?
+
+After class:
+
+1. Pwd -> getcwd().
+   Cd -> chdir().
+
+2. Directory are social files containing hard links.
+
+3. Directory links count will increase create a new directory under it.
+
+4. /.  
+    ..  for / , .., ., is the same node number in file system
+
+5. Link is removing the map between  the file and node number and reduce the link count
+
+6. Don't ulink it if the file has been opened.
+
+7. Better to traverse directories using FTS interfaces. see fts(3).

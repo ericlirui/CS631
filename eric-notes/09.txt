@@ -1,0 +1,20 @@
+Before class:
+
+
+After class:
+1. procedure:
+1) create socket : socket
+2) attach to a socket: bind
+3) listen to mark socket : listen
+4) accept : accept will block if no connections are available
+4) read /write
+
+2. Sockets must be removed using unlink(2)
+
+3. Stream sockets are stateful.
+
+HW2 comment:
+- calling system(3) will not work, since you do not
+get stderr; the assignment gave you very specific
+instructions to use exec
+- missing error checks

@@ -1,0 +1,15 @@
+Before class:
+What is the difference between dynamic share library and static library ?
+
+After class:
+1. Lockfiles must be removed by exit handlers otherwise restarted daemons will not run since the lockfile will still exist.
+
+2. Read elf header content : readelf -h a.out
+
+3. Hexdump -C a.aout
+
+4. List all the program header : readelf -l a.out
+
+5. ar : make an archive 
+
+6. C Library cannot be overwritten but library loading order can be exploited.

@@ -1,0 +1,21 @@
+Before class:
+1. What is the advantage between IPC and pipe?
+
+After class:
+1. System V IPC : For shared memory , the kernel and the process only only interact 2 times, while the msg queue should interact at least 4 times.
+
+2. ipcs -m : shared memory identifier
+   ipcs -c : semaphore idntifier.
+   ipcs -q : message queue information
+
+3. Order of parent /child processes cannot be determined, in the  example has child blocking so the parent execute first.
+
+4.The kernel will prevent malloc from overwriting shared memory.
+
+5.system v ipc 
+ 1) communicate between unrelated processes 2) kernel structures 3) fast but not popular
+
+PIPE
+1) communicate between related processes 2)kernel structures 3) slow with half-duplex 4) complex but universal.
+
+6.  Man Mkfifo

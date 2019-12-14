@@ -1,0 +1,31 @@
+Before class:
+How to see the content of the core file?
+
+
+After class:
+1. Some vid marks need to remember:  
+   Move multiple files, :n, :prev, :rew
+
+2.use ctagsto fast look-up in your code .
+
+3.Compiler process:
+  1) preprocess : cpp files
+  2) compilation : cc
+  3) Assembly: As
+  4) Linking : ld tool
+  
+4. Core files are snapshots of the executable at the time of a segmentation fault. 
+We can gcc with the core files and the bin file together to debug problems.
+
+5. Makefile:
+   ${PROG}:${OBJS}
+	${cc} ${CFLAGS} ${OBJS} -o {PROG}
+
+Homework1 notes:
+
+1.See sysconf, setrlimit , limits , to get to know pre-defined constants in your system.
+
+2.Avoid code duplication
+
+3.Don't strcat with argv[]. For big memory, we should first malloc a space and then copy or strdup it.
+

@@ -1,0 +1,32 @@
+Before class:
+What is the usage and meaning of union mount?
+
+After class:
+1. getfacl
+   Setfacl -m g:groupname:r a.c
+   Setfacl -m u:username :r a.c
+
+2. "File flags" beyond the eUID access, is used to avoid too many privileges 
+ UNIX: chflags Linux: setattr
+ Eg. Chflags uappend xxx ; after this command , xxx can only be appended.
+
+3. "Mount -u -o no exec /mnt"
+Update the mount attribute in a file system level.
+
+4. "Sysctl -w secureleve=2" -> used to upgrade secure level.
+ Note: 1)secure level can not be lower by command , only reboot can lower the secure level.
+       2) once upgraded ,commands like "mount -u -o exec xxx" can not be executed by root.
+
+5."ksh -r" : restricted shell.
+
+6." Jail " vitualization : create a self own environment.
+
+7. Cpuload: avg# of jobs in queue.
+
+8. setpriority of cpu priority : nice , renice
+
+9. Cpu affinity : taskset 
+   Capabilityies: restrict process.
+
+10. Namespace croups -> container which is not actually a vitualization.
+Eg. Docker , coreOS.

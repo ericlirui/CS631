@@ -1,0 +1,63 @@
+Before class:
+1.Can I change the c_time of file?
+
+After class:
+1. Ln -l / tmp bacon : just create a link, which does not matter if the file exists.
+
+2. For the homework1 , the cp command should check st_dev in stat structure as well.
+
+3. For the hole file, the real blocks it occupy are much smaller.
+
+4. mkfifo is likely to create a new pipe, just like the command pipe [|].
+
+5. We can use lstat to get the attributes of the link.
+
+6. Ls -l /dev/fd | cat
+
+7. Set_uid specify the owner of a file, the setuid() function should only use elevated privileges when needed.
+
+8. Remove file only matters with the directory permission, if the directory have write permission (w+x), it can be removed even it has not owned this file.
+
+9.umask, note that the bit on the mask is to turn off in the file mode
+
+10. Sticky bit : even other have perms, when it set, only owner can remove it.
+
+
+
+Homework1 comments:
+- archive and directory not named after your username;
+should be rli36, not ruili
+
+- please follow the style guide:
+- sort includes
+- spaces around clauses
+
+- you can't strcat to a buffer you haven't allocated
+and know to be large enough
+
+- don't print output the program didn't require:
+
+fprintf(stderr, "\n");
+
+- instead of using opendir(2) to determine if a path
+is a directory, use stat and S_ISDIR
+
+- incorrect check for same file:
+
+if(s_src.st_size == s_dest.st_size &&
+s_src.st_ino == s_dest.st_ino){
+
+you need to compare st_dev, not st_size
+
+- better to use O_TRUNC to open(2) than
+
+if(0 != ftruncate(fp[1],0)){
+
+- rather than specifying fixed permissions, use the
+st_mode from the source
+
+- your program allows invocation as
+./bbcp file1 file2 file3 file4
+
+
+

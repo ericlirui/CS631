@@ -1,0 +1,24 @@
+Before class:
+
+
+After class:
+1. Sticky set ask the program to be remained in .txt section memory which can  execute much faster next time.
+
+2. If no return value ,the EAX register remains the value of laster statement returned or stored.
+
+3.gdb can display those registers' value. 
+Use display rip/rbp/rax etc.
+
+4. In C89 standard, if no return function in main , it returns the original value of last statement. While in C99 standard, it implicitly return 0 for main function.
+
+5. Atexit() is like a deconstructer to register before the main exit.
+
+6. Malloc -> library function
+   Brk -> system call.
+ 
+7. Alloca -> allocate memory on stack 
+   Calloc -> initiate the memory to zero.
+
+8. Process can only change the soft limit of the resource. To change hard limit need higher permission.
+
+9. Fork also copy the IO buffer and pass it to the  "cat" command, then it flush the IO buffer out to the screen
