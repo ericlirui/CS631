@@ -18,6 +18,23 @@ set_exitcode(int code)
     exitcode = code;
 }
 
+int
+init_task()
+{
+    if ((taskhead = calloc(1, sizeof(struct task))) == NULL) {
+        perror("can't malloc");
+        set_exitcode(EXIT_NO_EXEC);
+        return -1;
+    }
+    return 0;
+}
+
+struct task *
+get_task_head()
+{
+    return taskhead;
+}
+
 void
 print_x_mode_task(struct task * cur, int para_flag)
 {
@@ -49,17 +66,18 @@ generate_task(char** tokens,int tokcount,int para_flag)
     struct task *cur;
     int is_bg = 0;
 
-    if ((cur = calloc(1, sizeof(struct task))) == NULL) {
-        perror("can't malloc");
-        set_exitcode(EXIT_NO_EXEC);
-        return NULL;
-    }
+    cur = get_task_head();
     cur->out_method = OUT_TO_STD;
     cur->next = NULL;
-    taskhead = NULL;
     for (i = 0; i < tokcount; i++) {
+        if (tokens[i] == NULL){
+            perror("memory fault");
+            set_exitcode(EXIT_NO_EXEC);
+            return NULL;
+        }
+
         /*when encounter pipe line, create a new task node*/
-        if(strncmp(tokens[i], IO_PIPE, sizeof(IO_PIPE)) == 0) {
+        if(strncmp(tokens[i], IO_PIPE, strlen(IO_PIPE)) == 0) {
             cur->command[command_pos] = NULL;
             if (cur->command[0] == NULL) {
                 printf("shell: syntax error near '|'\n");
@@ -68,7 +86,7 @@ generate_task(char** tokens,int tokcount,int para_flag)
             }
             command_pos = 0;
             struct task *newnode;
-            if ((newnode = calloc(1,sizeof(struct task))) == NULL) {
+            if ((newnode = (struct task *)malloc(sizeof(struct task))) == NULL) {
                 perror("can't malloc");
                 set_exitcode(EXIT_NO_EXEC);
                 return  NULL;
@@ -76,23 +94,20 @@ generate_task(char** tokens,int tokcount,int para_flag)
             newnode->out_method = OUT_TO_STD;
             newnode->next = NULL;
             cur->next = newnode;
-            if (taskhead == NULL) {
-                taskhead = cur;
-            }
             cur = cur->next;
         }
-        else if (strncmp(tokens[i], IO_IN, sizeof(IO_IN)) == 0) {
+        else if (strncmp(tokens[i], IO_IN, strlen(IO_IN)) == 0) {
             cur->in_file = tokens[++i];
         }
-        else if (strncmp(tokens[i], IO_OUT,sizeof(IO_OUT)) == 0) {
+        else if (strncmp(tokens[i], IO_OUT,strlen(IO_OUT)) == 0) {
             cur->out_method = OUT_TO_FILE;
             cur->out_file = tokens[++i];
         }
-        else if (strncmp(tokens[i], IO_OUT_APPEND, sizeof(IO_OUT_APPEND)) == 0) {
+        else if (strncmp(tokens[i], IO_OUT_APPEND, strlen(IO_OUT_APPEND)) == 0) {
             cur->out_method = APPEND_FILE;
             cur->append_file = tokens[++i];
         }
-        else if (strncmp(tokens[i], BG_STR, sizeof(BG_STR)) == 0){
+        else if (strncmp(tokens[i], BG_STR, strlen(BG_STR)) == 0){
             if (i != tokcount - 1) {
                 printf("shell: syntax error near '&'\n");
                 set_exitcode(EXIT_NO_EXEC);
@@ -111,8 +126,6 @@ generate_task(char** tokens,int tokcount,int para_flag)
         set_exitcode(EXIT_NO_EXEC);
         return NULL;
     }
-    if (taskhead == NULL)
-        taskhead = cur;
     if (is_bg)
         taskhead->bg = 1;
 

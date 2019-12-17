@@ -58,19 +58,12 @@ add_command_space(char *cmd)
     return buf;
 }
 
-char**
-tokenize(char* cmd)
+int
+tokenize(char* cmd,char ** tokens)
 {
-    char** tokens;
     int tokcount,tokbufsize;
-
     tokcount = 0;
-    tokbufsize = BUFSIZE * 2;
-    if ((tokens = calloc(tokbufsize, sizeof(char*))) == NULL)
-    {
-        perror("tokens calloc");
-        return NULL;
-    }
+    tokbufsize = BUFSIZE;
     tokens[tokcount] = strtok(cmd, "\t ");
     while (tokens[tokcount] != NULL) {
         tokcount ++;
@@ -78,30 +71,34 @@ tokenize(char* cmd)
             tokbufsize += BUFSIZE;
             if ((tokens = realloc(tokens, sizeof(char*) * tokbufsize)) == NULL) {
                 perror("tokens realloc");
-                return NULL;
+                return -1;
             }
         }
         tokens[tokcount] = strtok(NULL, "\t ");
     }
-    return tokens;
+    return 0;
 }
 
-char**
-parse_cmd(char *cmd)
+int
+parse_cmd(char *cmd,char** tokens)
 {
     char *cmdsp;
-    char** tokens;
-
     cmdsp = add_command_space(cmd);
     if (cmdsp == NULL)
-       return NULL;
+       return -1;
 #ifdef DEBUG
     printf("cmdspace:%s\n",cmdsp);
 #endif
-    tokens = tokenize(cmdsp);
-    if (tokens == NULL)
-        return NULL;
-    free(cmdsp);
-    return tokens;
+    if (tokenize(cmdsp,tokens) == -1)
+        return -1;
+    if (cmdsp != NULL)
+        free(cmdsp);
+    return 0;
 }
 
+void
+free_tokens(char ** tokenbuf)
+{
+
+    free((void*)tokenbuf);
+}

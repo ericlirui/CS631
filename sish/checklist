@@ -1,0 +1,53 @@
+For each assignment, copy this file into your homework
+submission directory and answer all questions.
+
+Did I write all the code myself?
+   - Don't copy and paste code from the internet, your
+     classmates, sample solutions, or anywhere else.
+     Review https://stevens.netmeister.org/631/#plagiarism
+YES
+
+Does my code follow the style guide?
+   - Code is communication.  Make sure your code is
+     readable, well-structured, properly indented,
+     with sensibily named variables and functions.
+YES
+
+Does my code compile without warnings or errors on a
+NetBSD 8.x system?
+  - Always use *at least* 'cc -Wall -Werror -Wextra',
+    possibly
+    'cc -ansi -g -Wall -Werror -Wextra -Wformat=2 -Wjump-misses-init -Wlogical-op -Wpedantic -Wshadow'.
+YES
+
+Did I provide a Makefile?
+  - 'make' should use the above CFLAGS and produce an
+    executable
+YES
+
+Did I provide a README to explain any problems or
+issues I encountered?
+  - Make sure that your text is well-formatted, plain
+    ASCII in proper English.  Use a spell checker.
+YES
+
+Did I check the return value of all function calls?
+  - Yes, that does include malloc(3).
+YES
+
+Did I send error messages to stderr?
+YES
+
+Did I use only meaningful and necessary comments?
+  - Your comments should explain the 'why', not the
+    'what'.
+YES
+
+Does my program return zero on success, non-zero otherwise?
+YES
+
+Did I make sure that my .h files only include function
+forward declarations, macros, etc., no function
+implementations or other code?
+YES
+

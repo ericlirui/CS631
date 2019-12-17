@@ -5,6 +5,7 @@
 #include <string.h>
 #include <pwd.h>
 #include <fcntl.h>
+#include <sys/wait.h>
 #include "sish.h"
 
 
@@ -247,6 +248,7 @@ execute_cmds(char ** tokenbuf,int para_flag)
     while(tokenbuf[tokcount] != NULL) tokcount++;
     if (tokcount == 0)
         return 0;
+
     if (strncmp(tokenbuf[0], EXIT, sizeof(EXIT)) == 0) {
         print_x_mode(tokenbuf,para_flag,tokcount);
         exit_builtin(tokcount);
@@ -268,7 +270,5 @@ execute_cmds(char ** tokenbuf,int para_flag)
         return 0;
 
     execute_tasks(head);
-
-    free_task();
     return 0;
 }

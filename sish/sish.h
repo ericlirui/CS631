@@ -39,11 +39,13 @@ struct task {
 };
 
 void init_sig();
-char** parse_cmd(char *);
+int init_task();
+struct task * get_task_head();
+int parse_cmd(char *,char**);
 int execute_cmds(char** ,int);
 int get_exitcode(void);
 void set_exitcode(int );
 void free_task();
 struct task* generate_task(char** ,int ,int );
-
+void free_tokens(char ** tokenbuf);
 #endif

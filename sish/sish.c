@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
+#include <signal.h>
 
 #include "sish.h"
 
@@ -48,29 +49,42 @@ init()
         perror("putenv");
     }
     init_sig();
+    init_task();
 }
 
 int
 execute(char * cmd, int para_flag)
 {
-    char** tokbuf = parse_cmd(cmd);
-    if (tokbuf == NULL) {
+    char** tokbuf;
+
+   if ((tokbuf = calloc(BUFSIZE, sizeof(char*))) == NULL){
+       perror("tokens realloc");
+       return -1;
+   }
+   init_task();
+
+   if ( parse_cmd(cmd,tokbuf) == -1) {
         perror("parse fail");
-        return -1;
+       free(tokbuf);
+       return -1;
     }
+
     if(execute_cmds(tokbuf,para_flag) != 0){
         perror("execute fail");
         free(tokbuf);
         return 0;
     }
-    free(tokbuf);
+    if(tokbuf != NULL)
+        free_tokens(tokbuf);
+    free_task();
+
     return 0;
 }
 
 void
 enter_shell_mode(int para_flag)
 {
-    char * cmd;
+    char * cmd = NULL;
     size_t len;
     int n;
     while(true) {

@@ -1,0 +1,77 @@
+
+At first , I implement Shell startup, options parsing, basic tokenization
+and then implement the basic builtin commands, after this , I optimize my command to support advanced tokenization. And
+let it to run the simple command, Finally , I add the pipeline  and the background function.
+
+Test:
+
+$ sish
+sish$ echo $$
+6465
+sish$ ls
+file1 file2
+sish$ ls | wc -l
+2
+sish$ echo $?
+0
+sish$ find / >/dev/null &
+sish$
+sish$ aed -e -p passin <file >file.enc
+sish$ cmd | sort | uniq -c | sort -n
+121 foo
+304 bar
+sish$ something
+something: command not found
+sish$ echo $?
+127
+sish$ rm /etc/passwd
+rm: /etc/passwd: Permission denied
+sish$ echo $?
+1
+sish$ exit
+$ sish -c date
+Sat Nov 29 21:18:07 EST 2014
+$ sish -x
+sish$ ls
++ ls
+file1 file2
+sish$ ls | wc -l
++ ls
++ wc -l
+2
+sish$ cd /tmp
++ cd /tmp
+sish$ pwd
++ pwd
+/tmp
+sish$ cd
++ cd
+sish$ pwd
++ pwd
+/home/jschauma
+sish$ exit
++ e
+
+cd
+cd ~
+cd ~/Documents
+cd ~nobody
+exit aaa
+cd ab abc
+cd / /etc
+abcd|efg|
+ls|acg
+cat|ls
+ls -al >>out|cat|wc
+pwd>out|cat
+abcd|cat
+cat|abce
+cat|ping google.com
+|||||
+ls|cat|wc -l
+ls|
+ls|&cat
+ls&&&
+>><<<|||||&&&&&<<<
+
+
