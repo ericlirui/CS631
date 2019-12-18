@@ -17,19 +17,13 @@ char* realloc_space(char* buf, int pos, int totalsize)
     return buf;
 }
 /* add whitespace for operators for later parse*/
-char*
-add_command_space(char *cmd)
+void
+add_command_space(char *cmd,char* buf)
 {
-    char *buf;
-    int pos,bufsize;
+    int pos;
     char ch;
 
     pos = 0;
-    bufsize = 2 * BUFSIZE;
-    if ((buf = calloc(bufsize,sizeof(char))) == NULL) {
-        perror("malloc buf");
-        return NULL;
-    }
     while( (cmd != NULL) && (ch = (*cmd)) != '\0' )
     {
         if (IS_OPTR(ch)) {
@@ -38,35 +32,36 @@ add_command_space(char *cmd)
                 buf[pos++] = ' ';
                 buf[pos++] = ch;
                 buf[pos++] = ch;
-                buf = realloc_space(buf,pos,bufsize);
                 buf[pos++] = ' ';
                 cmd++;
             }
             else {
                 buf[pos++] = ' ';
-                buf = realloc_space(buf,pos,bufsize);
                 buf[pos++] = ch;
-                buf = realloc_space(buf,pos,bufsize);
                 buf[pos++] = ' ';
             }
         }
         else
             buf[pos++] = ch;
-        buf = realloc_space(buf,pos,bufsize);
         cmd++;
     }
-    return buf;
+    return;
 }
 
 int
 tokenize(char* cmd,char ** tokens)
 {
+    char * tok;
     int tokcount,tokbufsize;
+
     tokcount = 0;
     tokbufsize = BUFSIZE;
-    tokens[tokcount] = strtok(cmd, "\t ");
-    while (tokens[tokcount] != NULL) {
+
+    tok = strtok(cmd, "\t ");
+    while (tok != NULL) {
+        tokens[tokcount] = strdup(tok);
         tokcount ++;
+
         if (tokcount >= BUFSIZE){
             tokbufsize += BUFSIZE;
             if ((tokens = realloc(tokens, sizeof(char*) * tokbufsize)) == NULL) {
@@ -74,7 +69,7 @@ tokenize(char* cmd,char ** tokens)
                 return -1;
             }
         }
-        tokens[tokcount] = strtok(NULL, "\t ");
+        tok = strtok(NULL, "\t ");
     }
     return 0;
 }
@@ -83,9 +78,11 @@ int
 parse_cmd(char *cmd,char** tokens)
 {
     char *cmdsp;
-    cmdsp = add_command_space(cmd);
-    if (cmdsp == NULL)
-       return -1;
+    if ((cmdsp = calloc( 2 * BUFSIZE,sizeof(char))) == NULL) {
+        perror("malloc buf");
+        return -1;
+    }
+    add_command_space(cmd,cmdsp);
 #ifdef DEBUG
     printf("cmdspace:%s\n",cmdsp);
 #endif
@@ -99,6 +96,5 @@ parse_cmd(char *cmd,char** tokens)
 void
 free_tokens(char ** tokenbuf)
 {
-
     free((void*)tokenbuf);
 }

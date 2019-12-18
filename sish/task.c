@@ -86,7 +86,7 @@ generate_task(char** tokens,int tokcount,int para_flag)
             }
             command_pos = 0;
             struct task *newnode;
-            if ((newnode = (struct task *)malloc(sizeof(struct task))) == NULL) {
+            if ((newnode = (struct task *)calloc(1,sizeof(struct task))) == NULL) {
                 perror("can't malloc");
                 set_exitcode(EXIT_NO_EXEC);
                 return  NULL;

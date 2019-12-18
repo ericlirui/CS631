@@ -57,11 +57,11 @@ execute(char * cmd, int para_flag)
 {
     char** tokbuf;
 
+    init_task();
    if ((tokbuf = calloc(BUFSIZE, sizeof(char*))) == NULL){
        perror("tokens realloc");
        return -1;
    }
-   init_task();
 
    if ( parse_cmd(cmd,tokbuf) == -1) {
         perror("parse fail");

@@ -64,21 +64,27 @@ cd_builtin(char** tokbuf,int tokencount)
 }
 
 void
-echo_builtin(char** tokens)
+echo_builtin(struct task * task)
 {
-    if (tokens[1] != NULL)
+    int i;
+    if (task->command[1] != NULL)
     {
-        if (!strcmp(tokens[1], CURRENT_PID_STR))
+        if (!strcmp(task->command[1], CURRENT_PID_STR))
         {
             (void)printf("%d\n", getpid());
         }
-        else if (!strcmp(tokens[1], EXIT_STATUS_STR))
+        else if (!strcmp(task->command[1], EXIT_STATUS_STR))
         {
             (void)printf("%d\n", get_exitcode());
         }
         else
         {
-            (void)printf("%s\n", tokens[1]);
+            i = 1;
+            while(task->command[i]){
+                printf("%s ", task->command[i]);
+                i++;
+            }
+            printf("\n");
         }
     }
     else
@@ -168,10 +174,15 @@ spawn_task(int in, int out, struct task *task)
     pid_t pid;
     if ((pid = fork()) == 0) {
         redirect_io(in,out,task);
-        if(execvp(task->command[0], task->command) == -1){
-            fprintf(stderr, "%s: command not found: %s\n", task->command[0],
-                    strerror(errno));
-            exit(EXIT_NO_EXEC);
+        if (strncmp(task->command[0], ECHO, sizeof(ECHO)) == 0) {
+            echo_builtin(task);
+            exit(0);
+        } else {
+            if (execvp(task->command[0], task->command) == -1) {
+                fprintf(stderr, "%s: command not found: %s\n", task->command[0],
+                        strerror(errno));
+                exit(EXIT_NO_EXEC);
+            }
         }
     } else if (pid > 0) {
         int status;
@@ -203,12 +214,17 @@ run_task(struct task *task)
 #ifdef DEBUG
     fprintf(stderr, "%s: command\n", task->command[0]);
 #endif
+    redirect_io(in, STDOUT_FILENO, task);
     /*single command*/
-    redirect_io(in, STDOUT_FILENO,task);
-    if( execvp(task->command[0], task->command) == -1){
-        fprintf(stderr, "%s: command not found: %s\n", task->command[0],
-                strerror(errno));
-        exit(EXIT_NO_EXEC);
+    if (strncmp(task->command[0], ECHO, sizeof(ECHO)) == 0) {
+        echo_builtin(task);
+        exit(0);
+    } else {
+        if (execvp(task->command[0], task->command) == -1) {
+            fprintf(stderr, "%s: command not found: %s\n", task->command[0],
+                    strerror(errno));
+            exit(EXIT_NO_EXEC);
+        }
     }
 }
 
@@ -261,11 +277,6 @@ execute_cmds(char ** tokenbuf,int para_flag)
         return 0;
     }
 
-    if (strncmp(tokenbuf[0], ECHO, sizeof(ECHO)) == 0) {
-        print_x_mode(tokenbuf,para_flag,tokcount);
-        echo_builtin(tokenbuf);
-        return 0;
-    }
     if((head = generate_task(tokenbuf, tokcount, para_flag)) == NULL)
         return 0;
 
