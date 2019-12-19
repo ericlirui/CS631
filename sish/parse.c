@@ -85,8 +85,8 @@ parse_cmd(char *cmd,char** tokens)
 void
 free_tokens(char ** tokenbuf)
 {
-    int i;
-    while( tokenbuf[i]){
+    int i = 0;
+    while(tokenbuf[i]){
         free(*(tokenbuf+i));
         i++;
     }
