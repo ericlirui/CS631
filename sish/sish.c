@@ -17,22 +17,32 @@ usage()
     errx(EXIT_FAILURE, "usage: %s [ -x ] [ -c command ]\n", getprogname());
 }
 
+/* Signal Handler for SIGINT */
+void sigintHandler(int sig_num)
+{
+    (void)sig_num;
+    /* Reset handler to catch SIGINT next time.
+       Refer http://en.cppreference.com/w/c/program/signal */
+    /*signal(SIGINT, sigintHandler);*/
+}
 void
 init_sig()
 {
-    if (signal(SIGINT, SIG_DFL) == SIG_ERR) {
+    if (signal(SIGINT, SIG_IGN) == SIG_ERR) {
         perror("reset SIGINT");
         exit(EXIT_FAILURE);
     }
-    if (signal(SIGQUIT, SIG_DFL) == SIG_ERR) {
+    if (signal(SIGQUIT, SIG_IGN) == SIG_ERR) {
         perror("reset SIGQUIT");
         exit(EXIT_FAILURE);
     }
-    if (signal(SIGTSTP, SIG_DFL) == SIG_ERR) {
+    if (signal(SIGTSTP, SIG_IGN) == SIG_ERR) {
         perror("reset SIGTSTP");
         exit(EXIT_FAILURE);
     }
 }
+
+
 
 
 void

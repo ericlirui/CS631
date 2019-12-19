@@ -5,17 +5,6 @@
 #include "sish.h"
 
 
-char* realloc_space(char* buf, int pos, int totalsize)
-{
-    if (pos >= totalsize) {
-        totalsize += BUFSIZE;
-        if ((buf = realloc(buf, totalsize)) == NULL) {
-            perror("buf realloc");
-            return NULL;
-        }
-    }
-    return buf;
-}
 /* add whitespace for operators for later parse*/
 void
 add_command_space(char *cmd,char* buf)

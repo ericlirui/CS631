@@ -6,8 +6,25 @@
 #include <pwd.h>
 #include <fcntl.h>
 #include <sys/wait.h>
+#include <signal.h>
 #include "sish.h"
 
+void
+reset_sig()
+{
+    if (signal(SIGINT, SIG_DFL) == SIG_ERR) {
+        perror("reset SIGINT");
+        exit(EXIT_FAILURE);
+    }
+    if (signal(SIGQUIT, SIG_DFL) == SIG_ERR) {
+        perror("reset SIGQUIT");
+        exit(EXIT_FAILURE);
+    }
+    if (signal(SIGTSTP, SIG_DFL) == SIG_ERR) {
+        perror("reset SIGTSTP");
+        exit(EXIT_FAILURE);
+    }
+}
 
 void
 print_x_mode(char** tokenbuf, int para_flag, int tokcount)
@@ -34,19 +51,22 @@ cd_builtin(char** tokbuf,int tokencount)
         printf("cd: too many arguments\n");
         return;
     }
-    if (tokencount == 1 ||
-        (tokencount == MAX_CD_PARA &&
-        strncmp(tokbuf[tokencount - 1], "~", strlen("~")) == 0)) {
-        passwd = getpwuid(getuid());
-        if(passwd == NULL){
-            set_exitcode(errno);
-            return;
-        }
+
+    passwd = getpwuid(getuid());
+    if(passwd == NULL){
+        set_exitcode(errno);
+        return;
+    }
+    if (tokencount == 1)
+        (void)snprintf(dir, CD_PATHSIZE, "%s", passwd->pw_dir);
+    else if (tokencount == MAX_CD_PARA &&
+            strncmp(tokbuf[tokencount - 1], "~", strlen("~")) == 0) {
         (void)snprintf(dir, CD_PATHSIZE, "%s%s", passwd->pw_dir, tokbuf[tokencount - 1] + 1);
     }
     else {
         strncpy(dir,tokbuf[tokencount - 1],strlen(tokbuf[tokencount - 1]));
     }
+
     if (dir[0] != '\0') {
         if(realpath(dir, path) == NULL){
             set_exitcode(errno);
@@ -200,6 +220,10 @@ run_task(struct task *task)
 {
     int pipe_fd[2];
     int in,out;
+
+    in = dup(STDIN_FILENO);
+    out = dup(STDOUT_FILENO);
+
     while (task->next != NULL) {
         if (pipe(pipe_fd)) {
             perror("pipe");
@@ -212,7 +236,7 @@ run_task(struct task *task)
         task = task->next;
     }
 #ifdef DEBUG
-    fprintf(stderr, "%s: command\n", task->command[0]);
+    fprintf(stderr, "command:%s in: %d\n", task->command[0],in);
 #endif
     redirect_io(in, STDOUT_FILENO, task);
     /*single command*/
@@ -239,7 +263,7 @@ execute_tasks(struct task * head)
     }
 
     if (pid == 0) {
-        init_sig();
+        reset_sig();
         if (head->bg)
             setpgid(0, 0);
         run_task(head);
@@ -281,5 +305,6 @@ execute_cmds(char ** tokenbuf,int para_flag)
         return 0;
 
     execute_tasks(head);
+    init_sig();
     return 0;
 }

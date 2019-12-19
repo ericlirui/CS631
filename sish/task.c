@@ -77,7 +77,8 @@ generate_task(char** tokens,int tokcount,int para_flag)
         }
 
         /*when encounter pipe line, create a new task node*/
-        if(strncmp(tokens[i], IO_PIPE, strlen(IO_PIPE)) == 0) {
+        if(strlen(tokens[i]) == strlen(IO_PIPE) &&
+            strncmp(tokens[i], IO_PIPE, strlen(IO_PIPE)) == 0) {
             cur->command[command_pos] = NULL;
             if (cur->command[0] == NULL) {
                 printf("shell: syntax error near '|'\n");
@@ -99,15 +100,18 @@ generate_task(char** tokens,int tokcount,int para_flag)
         else if (strncmp(tokens[i], IO_IN, strlen(IO_IN)) == 0) {
             cur->in_file = tokens[++i];
         }
-        else if (strncmp(tokens[i], IO_OUT,strlen(IO_OUT)) == 0) {
+        else if (strlen(tokens[i]) == strlen(IO_OUT) &&
+                strncmp(tokens[i], IO_OUT,strlen(IO_OUT)) == 0) {
             cur->out_method = OUT_TO_FILE;
             cur->out_file = tokens[++i];
         }
-        else if (strncmp(tokens[i], IO_OUT_APPEND, strlen(IO_OUT_APPEND)) == 0) {
+        else if (strlen(tokens[i]) == strlen(IO_OUT_APPEND) &&
+                strncmp(tokens[i], IO_OUT_APPEND, strlen(IO_OUT_APPEND)) == 0) {
             cur->out_method = APPEND_FILE;
             cur->append_file = tokens[++i];
         }
-        else if (strncmp(tokens[i], BG_STR, strlen(BG_STR)) == 0){
+        else if (strlen(tokens[i]) == strlen(BG_STR) &&
+                strncmp(tokens[i], BG_STR, strlen(BG_STR)) == 0){
             if (i != tokcount - 1) {
                 printf("shell: syntax error near '&'\n");
                 set_exitcode(EXIT_NO_EXEC);

@@ -28,6 +28,7 @@
 #define APPEND_FILE 9
 #define OUT_FILE_PERM 0644
 
+
 struct task {
     char *command[BUFSIZE];
     int out_method;
