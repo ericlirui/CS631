@@ -17,14 +17,7 @@ usage()
     errx(EXIT_FAILURE, "usage: %s [ -x ] [ -c command ]\n", getprogname());
 }
 
-/* Signal Handler for SIGINT */
-void sigintHandler(int sig_num)
-{
-    (void)sig_num;
-    /* Reset handler to catch SIGINT next time.
-       Refer http://en.cppreference.com/w/c/program/signal */
-    /*signal(SIGINT, sigintHandler);*/
-}
+
 void
 init_sig()
 {
@@ -41,9 +34,6 @@ init_sig()
         exit(EXIT_FAILURE);
     }
 }
-
-
-
 
 void
 init()
