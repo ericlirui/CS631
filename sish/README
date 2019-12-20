@@ -1,13 +1,7 @@
-
-At first , I implement Shell startup, options parsing, basic tokenization
-and then implement the basic builtin commands, after this , I optimize my command to support advanced tokenization. And
-let it to run the simple command, Finally , I add the pipeline  and the background function.
-
-
-I encounter a problem:
-the program at first run ok on my mac, but not on the NetBSD, because the stack memory has overlapped, so I reallocted the
-memory of token buffer to make sure it does not happen.
-
+NOTE:
+Because I blocked on the parent process, so command like cat | ping google.com, will stuck on the cat process, so pipe next
+ping command will never be executed. The correct way is to make each process non-block on parent process, record the current pid
+of parent process, and at the end of the procedure , traverse all the pid , wait till all the process finished.
 
 Test:
 
