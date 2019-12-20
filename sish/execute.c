@@ -151,6 +151,7 @@ redirect_io(int in, int out, struct task * task)
                 fprintf(stderr, "Unable to dup2 %d: %s\n", in, strerror(errno));
                 exit(EXIT_NO_EXEC);
             }
+            (void)close(in);
         }
     }
     /*deal with output and append file*/
